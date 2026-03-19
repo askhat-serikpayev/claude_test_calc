@@ -1,0 +1,249 @@
+/* ==========================================================================
+   Calculator — Stylesheet
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Custom Properties (Design Tokens)
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* Colors */
+  --color-bg:              #1c1c1e;
+  --color-text-primary:    #ffffff;
+  --color-text-secondary:  #8e8e93;
+  --color-text-dark:       #1c1c1e;
+  --color-accent:          #ff9f0a;
+  --color-btn-number:      #333336;
+  --color-btn-function:    #a5a5a5;
+  --color-ripple:          rgba(255, 255, 255, 0.15);
+
+  /* Typography */
+  --font-family:           'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-weight-light:     300;
+  --font-weight-regular:   400;
+  --font-size-display:     64px;
+  --font-size-display-sm:  48px;
+  --font-size-display-xs:  36px;
+  --font-size-display-xxs: 28px;
+  --font-size-expression:  18px;
+  --font-size-btn:         24px;
+  --font-size-btn-op:      28px;
+
+  /* Spacing */
+  --spacing-xs:            8px;
+  --spacing-sm:            12px;
+  --spacing-md:            20px;
+  --spacing-lg:            24px;
+
+  /* Layout */
+  --calculator-max-width:  360px;
+  --btn-grid-gap:          12px;
+  --btn-border-radius:     50%;
+  --btn-zero-radius:       48px;
+  --display-min-height:    120px;
+
+  /* Animation */
+  --transition-fast:       0.1s ease;
+  --transition-medium:     0.15s ease;
+  --ripple-size:           50px;
+  --ripple-duration:       0.5s;
+}
+
+/* --------------------------------------------------------------------------
+   2. Reset
+   -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* --------------------------------------------------------------------------
+   3. Base / Layout
+   -------------------------------------------------------------------------- */
+
+body {
+  font-family: var(--font-family);
+  background: var(--color-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.calculator {
+  width: 100%;
+  max-width: var(--calculator-max-width);
+  padding: var(--spacing-md);
+}
+
+/* --------------------------------------------------------------------------
+   4. Display
+   -------------------------------------------------------------------------- */
+
+.display {
+  background: var(--color-bg);
+  padding: var(--spacing-md) var(--spacing-sm) var(--spacing-lg);
+  text-align: right;
+  min-height: var(--display-min-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.display__expression {
+  font-size: var(--font-size-expression);
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-secondary);
+  min-height: 24px;
+  word-break: break-all;
+  margin-bottom: var(--spacing-xs);
+}
+
+.display__value {
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: 1.1;
+  word-break: break-all;
+  transition: font-size var(--transition-medium);
+}
+
+.display__value--shrink-1 { font-size: var(--font-size-display-sm); }
+.display__value--shrink-2 { font-size: var(--font-size-display-xs); }
+.display__value--shrink-3 { font-size: var(--font-size-display-xxs); }
+
+/* --------------------------------------------------------------------------
+   5. Button Grid
+   -------------------------------------------------------------------------- */
+
+.btn-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--btn-grid-gap);
+}
+
+/* --------------------------------------------------------------------------
+   6. Buttons — Base
+   -------------------------------------------------------------------------- */
+
+.btn {
+  font-family: var(--font-family);
+  font-size: var(--font-size-btn);
+  font-weight: var(--font-weight-regular);
+  border: none;
+  border-radius: var(--btn-border-radius);
+  aspect-ratio: 1;
+  cursor: pointer;
+  transition:
+    transform var(--transition-fast),
+    filter var(--transition-fast),
+    background-color var(--transition-medium);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:hover {
+  filter: brightness(1.2);
+  transform: scale(1.05);
+}
+
+.btn:active {
+  transform: scale(0.95);
+  filter: brightness(0.9);
+}
+
+/* --------------------------------------------------------------------------
+   7. Buttons — Variants
+   -------------------------------------------------------------------------- */
+
+.btn--number {
+  background: var(--color-btn-number);
+  color: var(--color-text-primary);
+}
+
+.btn--operator {
+  background: var(--color-accent);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-btn-op);
+}
+
+.btn--operator.is-active {
+  background: var(--color-text-primary);
+  color: var(--color-accent);
+}
+
+.btn--function {
+  background: var(--color-btn-function);
+  color: var(--color-text-dark);
+}
+
+.btn--zero {
+  grid-column: span 2;
+  border-radius: var(--btn-zero-radius);
+  aspect-ratio: auto;
+  height: 100%;
+  text-align: left;
+  padding-left: 30px;
+}
+
+/* --------------------------------------------------------------------------
+   8. Ripple Animation
+   -------------------------------------------------------------------------- */
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--color-ripple);
+  width: var(--ripple-size);
+  height: var(--ripple-size);
+  transform: scale(0);
+  animation: ripple var(--ripple-duration) linear;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   9. Responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 400px) {
+  .calculator {
+    padding: var(--spacing-sm);
+  }
+
+  .btn-grid {
+    gap: 10px;
+  }
+
+  .display__value {
+    font-size: 52px;
+  }
+
+  .display__value--shrink-1 { font-size: 40px; }
+  .display__value--shrink-2 { font-size: 32px; }
+  .display__value--shrink-3 { font-size: 24px; }
+
+  .btn {
+    font-size: 20px;
+  }
+
+  .btn--operator {
+    font-size: 24px;
+  }
+}
